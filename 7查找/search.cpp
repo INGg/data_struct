@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <cstring>
 #include <cstdio>
+#include <vector>
 #include <stack>
 #include <time.h>
 #include <numeric>
@@ -26,10 +27,15 @@ int liner_search(int x){
 }
 
 int binary_search(int x){ // 要保证有序
-    sort(a + 1, a + 1 + n);
+    
+    vector<PII> v;
+    for (int i = 1; i <= n; i++)
+        v.push_back({a[i], i});
+    if(!is_sorted(v.begin(), v.end()))
+    sort(v.begin(), v.end());
     int l = 1, r = n;
     while(l <= r){
-        int mid = l + r >> 1;
+        int mid = (l + r) >> 1;
         if(x < a[mid])
             r = mid - 1;
         else if(x > a[mid])

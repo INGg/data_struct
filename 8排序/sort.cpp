@@ -15,6 +15,13 @@ const int N = 1e2 + 10;
 int n;
 int a[N];
 
+void print(int l, int r){ // 输出数组a中l到r的元素
+    for (int i = l; i <= r; i++){
+        cout << a[i] << ' ';
+    }
+    cout << endl;
+}
+
 // 插入排序
 // 描述：从前往后循环插入比当前元素在他前面的那些元素他应该在的位置上
 // 特点：前一部分是有序的，但不一定是最终的顺序
@@ -30,6 +37,9 @@ void insert_sort(int a[]){
             j--;
         }
         a[j] = a[0];
+
+        cout << "现在是插入排序第" << i - 1 << "趟，此时的状态为 : ";
+        print(1, n);
     }
 }
 
@@ -55,6 +65,9 @@ void binary_search_insert_sort(int a[]){
             a[j + 1] = a[j];
         }
         a[l] = a[0];
+
+        cout << "现在是折半插入排序第" << i - 1 << "趟，此时的状态为 : ";
+        print(1, n);
     }
 }
 
@@ -74,6 +87,8 @@ void bubble_sort(int a[]){
                 swap(a[j], a[j - 1]);
             }
         }
+        cout << "现在是冒泡排序第" << i << "趟，此时的状态为 : ";
+        print(1, n);
         if(!flag) // 已经有序了
             break;
     }
@@ -94,6 +109,8 @@ void select_sort(int a[]){
             }
         }
         swap(a[i], a[k]); // 放到他应该在的位置上
+        cout << "现在是简单选择排序第" << i << "趟，此时的状态为 : ";
+        print(1, n);
     }
 }
 
@@ -117,6 +134,8 @@ void shell_sort(int a[]){
                 a[j] = a[0];
             }
         }
+        cout << "此时的希尔排序增量d为 : " << d << " 此时的数组状态为 : ";
+        print(1, n);
     }
 }
 
@@ -133,6 +152,10 @@ void quick_sort(int l, int r)  // 快速排序
         do j--; while (a[j] > x); // 寻找右边的比x大的位置
         if (i < j) swap(a[i], a[j]); // 交换使得满足快速排序的定义
     }
+
+    cout << "此时快速排序排序中枢为: " << x << ", 此时的状态为 : ";
+    print(1, n);
+
     // 递归处理没有排好序的部分
     quick_sort(l, j);
     quick_sort(j + 1, r);
@@ -177,11 +200,14 @@ void merge_sort(int a[]){
         st1.push({t.first, mid}), st1.push({mid + 1, t.second});
     }
 
+
     while(st2.size()){
         // cout << st2.top().x << ' ' << st2.top().second << endl;
         auto t = st2.top();
         st2.pop();
         merge(t.first, t.second);
+        cout << "此时归并排序的状态为: ";
+        print(1, n);
     }
 }
 
@@ -222,12 +248,19 @@ struct heap{
         up(sz);
     }
 
-    void pop(){
+    void pop(){ // 弹出
         if(sz){
 			h[1] = h[sz];
 			sz--;
 			down(1);
 		}
+    }
+
+    void print(){ // 输出此时二叉树
+        for (int i = 1; i <= sz; i++){
+            cout << h[i] << ' ';
+        }
+        cout << endl;
     }
 
     heap(int _h[]){
@@ -243,25 +276,30 @@ struct heap{
 int main(){
     srand(int(time(0))); // 设置随机数种子
     cout << "请输入随机数个数:";
-    cin >> n;
+    // cin >> n;
+    n = 10;
     for (int i = 1; i <= n; i++){
         a[i] = rand() % n + 1; // 生成1~n之间的随机数
     }
+    cout << "待排序的数组为: ";
+    print(1, n);
     // insert_sort(a); // 插入排序
     // binary_search_insert_sort(a); // 折半插入排序
     // bubble_sort(a); // 冒泡排序
     // select_sort(a); // 选择排序
     // shell_sort(a); // 希尔排序
-    // radix_sort(10, 10); // 基数排序
     // merge_sort(a); // 归并排序
-    // auto h = heap(a);  // 堆排序
-    // while(h.size()){
-    //     cout << h.top() << ' ';
-    //     h.pop();
-    // }
-    
 
-    for (int i = 1; i <= n; i++){
-        cout << a[i] << ' ';
+    cout << "最后的状态为: ";
+    auto h = heap(a);  // 堆排序
+    while(h.size()){
+        cout << h.top() << ' ';
+        h.pop();
+        h.print();
     }
+
+    // cout << "最后的状态为: ";
+    // for (int i = 1; i <= n; i++){
+    //     cout << a[i] << ' ';
+    // }
 }
